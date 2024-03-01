@@ -1,21 +1,40 @@
-import { FilterLabel, FilterInput } from './Filter.styled';
-import { setFilter } from 'redux/contacts/filterSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectFilter } from 'redux/contacts/selectors';
+import { useDispatch } from 'react-redux';
+
+import { setFilter } from 'redux/filter/slice';
+import { useFilter } from 'hooks';
+
+import {
+  BgFocus,
+  Input,
+  InputName,
+  InputWrap,
+  SearchIcon,
+} from './Filter.style';
 
 export const Filter = () => {
-  const filter = useSelector(selectFilter);
+  const { filterValue } = useFilter();
+
   const dispatch = useDispatch();
+
+  const onChange = ({ target: { value } }) => dispatch(setFilter(value));
+
   return (
     <>
-      <FilterLabel>
-        <FilterInput
+      <InputWrap>
+        <SearchIcon />
+        <Input
+          debounceTimeout={300}
+          value={filterValue}
+          onChange={onChange}
           type="text"
-          placeholder="Find contacts"
-          value={filter}
-          onChange={e => dispatch(setFilter(e.currentTarget.value))}
+          required
+          autoComplete="off"
+          placeholder="&nbsp;"
         />
-      </FilterLabel>
+        <InputName>Find contacts</InputName>
+
+        <BgFocus></BgFocus>
+      </InputWrap>
     </>
   );
 };

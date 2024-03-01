@@ -1,46 +1,36 @@
 import { Title } from 'components';
-import { useDispatch, useSelector } from 'react-redux';
-import { logOut } from 'redux/auth/authOperations';
-import { selectUserEmail, selectUsername } from 'redux/auth/authSelectors';
-import {
-  ContentWrap,
-  LogOutButton,
-  LogoutIcon,
-  ProfileWrap,
-  Text,
-} from './Profile.style';
+import { Image, Wrap, Text, TextWrap, Button, GritWrap } from './Profile.style';
+import person from 'images/person.webp';
+import { useAuth } from 'hooks';
+import { useDispatch } from 'react-redux';
+import { authOperations } from 'redux/auth';
 
 export const Profile = () => {
   const dispatch = useDispatch();
-  const name = useSelector(selectUsername);
-  const email = useSelector(selectUserEmail);
-
+  const {
+    user: { name, email },
+  } = useAuth();
   return (
-    <ProfileWrap>
-      <Title style={{ color: 'white' }}>Profile</Title>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '20px',
-        }}
-      >
-        <img
-          style={{ width: '200px' }}
-          src="https://static-00.iconduck.com/assets.00/user-icon-1024x1024-dtzturco.png"
-          alt="user_photo"
-        />
-        <ContentWrap>
-          <Text style={{ color: '#ff5500' }}>Name:</Text>
-          <Text>{name}</Text>
-          <Text style={{ color: '#ff5500' }}>Email:</Text>
-          <Text style={{ marginBottom: '0px' }}>{email}</Text>
-        </ContentWrap>
-      </div>
-      <LogOutButton onClick={() => dispatch(logOut())} type="button">
-        Logout
-        <LogoutIcon />
-      </LogOutButton>
-    </ProfileWrap>
+    <>
+      <Wrap>
+        <Title $textAlign="center" $margin="0 0 50px 0 ">
+          Profile
+        </Title>
+        <GritWrap>
+          <Image src={person} alt="" width="150" height="150" />
+
+          <TextWrap>
+            <Text $color="#3eabb6">Name:</Text>
+            <Text $fontSize="16px">{name}</Text>
+            <Text $color="#3eabb6">Email:</Text>
+            <Text $fontSize="16px">{email}</Text>
+          </TextWrap>
+
+          <Button onClick={() => dispatch(authOperations.logout())}>
+            Logout
+          </Button>
+        </GritWrap>
+      </Wrap>
+    </>
   );
 };

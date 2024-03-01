@@ -1,72 +1,67 @@
-import { Title } from 'components';
-import { useState } from 'react';
+import { ErrorMessage, Formik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { logIn } from 'redux/auth/authOperations';
+import * as Yup from 'yup';
+
 import {
-  EMailIcon,
-  FormWrapper,
-  LoginButton,
-  LoginIcon,
+  Button,
+  FormStyled,
+  PersonIcon,
+  StyledLink,
+  Title,
+  Text,
   PasswordIcon,
-  StyledForm,
-  StyledInput,
-  StyledLabel,
-} from '../Form.style';
+  InvalidInput,
+} from 'components';
+
+import { Input } from '../Input';
+import { authOperations } from 'redux/auth';
+import { scheme } from '../FormValidation';
+
+const schemeLogin = Yup.object().shape({
+  email: scheme.email,
+  password: scheme.password,
+});
 
 export const LoginForm = () => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleChange = ({ target: { name, value } }) => {
-    switch (name) {
-      case 'email':
-        return setEmail(value);
-      case 'password':
-        return setPassword(value);
-      default:
-        return;
-    }
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    dispatch(logIn({ email, password }));
-    setEmail('');
-    setPassword('');
-  };
 
   return (
-    <FormWrapper>
-      <Title>Sign in Form</Title>
+    <Formik
+      initialValues={{ email: '', password: '' }}
+      onSubmit={values => {
+        dispatch(authOperations.login(values));
+      }}
+      validationSchema={schemeLogin}
+    >
+      {() => (
+        <FormStyled>
+          <Title>Login</Title>
 
-      <StyledForm onSubmit={handleSubmit}>
-        <StyledLabel>
-          Email
-          <StyledInput
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-          />
-          <EMailIcon />
-        </StyledLabel>
+          <Input icon={<PersonIcon />} type="text" name="email" label="Email">
+            {' '}
+            <ErrorMessage name="email" component={InvalidInput} />
+          </Input>
 
-        <StyledLabel>
-          Password
-          <StyledInput
+          <Input
+            icon={<PasswordIcon />}
             type="password"
             name="password"
-            value={password}
-            onChange={handleChange}
-          />
-          <PasswordIcon />
-        </StyledLabel>
+            label="Password"
+          >
+            {' '}
+            <ErrorMessage name="password" component={InvalidInput} />
+          </Input>
 
-        <LoginButton type="submit">
-          Login <LoginIcon />
-        </LoginButton>
-      </StyledForm>
-    </FormWrapper>
+          <Text>
+            Don't have an account yet?{' '}
+            <StyledLink to="/register">
+              <u>Sign up.</u>
+            </StyledLink>
+          </Text>
+
+          <Button type="submit">Login</Button>
+        </FormStyled>
+      )}
+    </Formik>
   );
 };

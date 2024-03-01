@@ -1,82 +1,70 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { register } from 'redux/auth/authOperations';
+import { ErrorMessage, Formik } from 'formik';
+import * as Yup from 'yup';
 import {
-  EMailIcon,
-  FormWrapper,
-  PasswordIcon,
+  Button,
+  Title,
+  FormStyled,
   PersonIcon,
-  StyledForm,
-  StyledInput,
-  StyledLabel,
-} from '../Form.style';
-import { StyledButton, Title } from 'components';
+  StyledLink,
+  Text,
+  PasswordIcon,
+  InvalidInput,
+} from 'components';
+import { useDispatch } from 'react-redux';
+import { authOperations } from 'redux/auth';
+import { Input } from '../Input';
+import { scheme } from '../FormValidation';
+
+const schemeRegister = Yup.object().shape({
+  name: scheme.name,
+  email: scheme.email,
+  password: scheme.password,
+});
 
 export const RegisterForm = () => {
   const dispatch = useDispatch();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleChange = ({ target: { name, value } }) => {
-    switch (name) {
-      case 'name':
-        return setName(value);
-      case 'email':
-        return setEmail(value);
-      case 'password':
-        return setPassword(value);
-      default:
-        return;
-    }
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    dispatch(register({ name, email, password }));
-    setName('');
-    setEmail('');
-    setPassword('');
-  };
   return (
-    <FormWrapper>
-      <Title>Sign up Form</Title>
-      <StyledForm onSubmit={handleSubmit}>
-        <StyledLabel>
-          Name
-          <StyledInput
-            type="text"
-            name="name"
-            value={name}
-            onChange={handleChange}
-          />
-          <PersonIcon />
-        </StyledLabel>
+    <Formik
+      initialValues={{ name: '', email: '', password: '' }}
+      onSubmit={values => {
+        dispatch(
+          authOperations.register({
+            ...values,
+          })
+        );
+      }}
+      validationSchema={schemeRegister}
+    >
+      {() => (
+        <FormStyled>
+          <Title>Sign up</Title>
 
-        <StyledLabel>
-          Email
-          <StyledInput
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-          />
-          <EMailIcon />
-        </StyledLabel>
+          <Input icon={<PersonIcon />} type="text" name="name" label="Name">
+            <ErrorMessage name="name" component={InvalidInput} />
+          </Input>
+          <Input icon={<PersonIcon />} type="email" name="email" label="Email">
+            <ErrorMessage name="email" component={InvalidInput} />
+          </Input>
 
-        <StyledLabel>
-          Password
-          <StyledInput
+          <Input
+            icon={<PasswordIcon />}
             type="password"
             name="password"
-            value={password}
-            onChange={handleChange}
-          />
-          <PasswordIcon />
-        </StyledLabel>
+            label="Password"
+          >
+            <ErrorMessage name="password" component={InvalidInput} />
+          </Input>
 
-        <StyledButton type="submit">Sign up</StyledButton>
-      </StyledForm>
-    </FormWrapper>
+          <Text>
+            Already have an account?{' '}
+            <StyledLink to="/login">
+              <u>Log in.</u>
+            </StyledLink>
+          </Text>
+
+          <Button type="submit">Sign up</Button>
+        </FormStyled>
+      )}
+    </Formik>
   );
 };

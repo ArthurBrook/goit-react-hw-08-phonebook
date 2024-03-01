@@ -1,7 +1,10 @@
-import { HomeContent } from 'components';
+import { HomeHero } from "components";
 
-const Home = () => {
-  return <HomeContent />;
+
+  const Home = () => {
+  return (
+   <HomeHero/>
+  );
 };
 
-export default Home;
+export default Home

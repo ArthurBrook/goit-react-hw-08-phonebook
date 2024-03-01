@@ -1,7 +1,10 @@
 import { Profile } from 'components';
 
 const UserProfile = () => {
-  return <Profile />;
+  return (
+    <>
+      <Profile />
+    </>
+  );
 };
-
 export default UserProfile;

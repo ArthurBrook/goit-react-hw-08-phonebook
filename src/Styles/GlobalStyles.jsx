@@ -1,28 +1,25 @@
 import { createGlobalStyle } from 'styled-components';
-import 'modern-normalize';
+import bg from '../images/bg.webp';
 
 export const GlobalStyle = createGlobalStyle`
-  body {
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+body {
+  background-image: url(${bg});
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-size: cover; 
+  background-color: #575757;;
+
+  min-height: 100vh;
   margin: 0;
+
+  font-style: normal;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(
-    to bottom,
-    #111111,
-    #333333
-  );
-   color: ${({ theme }) => theme.colors.accent};
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 h1,
@@ -36,28 +33,31 @@ p {
   margin-bottom: 0;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
-  padding: 0;
+  padding-left: 0;
   list-style: none;
 }
 
 a {
-  color: currentColor;
+  color: inherit;
   text-decoration: none;
 }
 
 button {
+  padding: 0;
+  border: none;
   cursor: pointer;
 }
 
 img {
   display: block;
   max-width: 100%;
-  object-fit: cover;
+  height: auto;
 }
-
-address {
-  font-style: normal;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 `;

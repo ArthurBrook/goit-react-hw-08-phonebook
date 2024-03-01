@@ -1,59 +1,60 @@
+import PropTypes from 'prop-types';
+
+import { BsInfo } from 'react-icons/bs';
 import {
-  StyledContactItem,
-  DeleteButton,
-  EditButton,
-} from './ContactItem.styled';
-import { BiTrash, BiEdit } from 'react-icons/bi';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { deleteContact } from 'redux/contacts/contactsOperations';
-import { selectIsDeleting } from 'redux/contacts/selectors';
-import EditModal from 'components/EditModal/EditModal';
+  Item,
+  Text,
+  TextWrap,
+  MoreDetails,
+  ButtonDel,
+} from './ContactItem.style';
 
-export const ContactItem = ({ name, id, number }) => {
+import { contactsOperations } from 'redux/contacts';
+import { useContacts } from 'hooks';
+import { useDispatch } from 'react-redux';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { openModal } from 'redux/contacts/slice';
+
+export const ContactItem = ({ contact }) => {
   const dispatch = useDispatch();
-  const isDeleting = useSelector(selectIsDeleting);
-  const [showModal, setShowModal] = useState(false);
-  const [deleteButtonLabel, setDeleteButtonLabel] = useState('Delete');
 
-  const handleDeleteButtonClick = id => {
-    setDeleteButtonLabel('Deleting...');
-    toast.info(`${name} was deleted from your contact list.`);
-    dispatch(deleteContact(id)).then(() => {
-      setDeleteButtonLabel('Delete');
-    });
+  const { id, name } = contact;
+  const { loading } = useContacts();
+
+  const handlerDeleteBtn = () => {
+    dispatch(contactsOperations.deleteContact({ id, name }));
   };
 
-  const toggleModal = () => {
-    setShowModal(prevState => !prevState);
+  const handleInfoBtn = () => {
+    dispatch(openModal(contact));
   };
 
   return (
     <>
-      <StyledContactItem>
-        {name}: {number}
-        <div>
-          <EditButton type="button" onClick={toggleModal}>
-            <BiEdit />
-          </EditButton>
-          <DeleteButton
-            type="button"
-            onClick={() => handleDeleteButtonClick(id)}
-            disabled={isDeleting}
-          >
-            {deleteButtonLabel}
-            <BiTrash />
-          </DeleteButton>
-        </div>
-        <EditModal
-          modalIsOpen={showModal}
-          closeModal={toggleModal}
-          name={name}
-          number={number}
-          id={id}
-        />
-      </StyledContactItem>
+      <Item>
+        <MoreDetails type="button" onClick={handleInfoBtn}>
+          <BsInfo />
+        </MoreDetails>
+        <TextWrap>
+          <Text>{name}</Text>
+        </TextWrap>
+
+        <ButtonDel
+          disabled={loading && 'disabled'}
+          onClick={handlerDeleteBtn}
+          type="button"
+        >
+          <AiOutlineDelete />
+        </ButtonDel>
+      </Item>
     </>
   );
+};
+
+ContactItem.propTypes = {
+  contact: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }).isRequired,
 };

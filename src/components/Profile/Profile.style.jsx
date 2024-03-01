@@ -1,52 +1,62 @@
 import styled from 'styled-components';
-import { GiExitDoor } from 'react-icons/gi';
 
-export const ProfileWrap = styled.div`
-  width: 500px;
+export const Wrap = styled.div`
+  width: 420px;
   height: 420px;
   padding: 30px 20px;
+
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 20px;
   backdrop-filter: blur(15px);
-  margin: 30px auto;
+`;
+export const GritWrap = styled.div`
+  display: grid;
+  grid-template-areas:
+    'img text'
+    'btn btn';
+  gap: 30px 0;
+  grid-template-columns: 40% 1fr;
 `;
 
-export const ContentWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 20px 10px;
-  gap: 5px;
-  background: rgba(0, 0, 0, 0.222);
-  border: 2px solid hsla(0, 0%, 100%, 0.5);
-  border-radius: 10px;
-  height: 180px;
+export const Image = styled.img`
+  grid-area: img;
 `;
 
+export const TextWrap = styled.div`
+  grid-area: text;
+  display: grid;
+  align-content: center;
+  background: #00000055;
+  padding: 20px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+`;
 export const Text = styled.p`
+  color: ${({ theme, $color }) => ($color ? $color : theme.colors.white)};
+  max-width: 800px;
+
+  font-size: ${({ $fontSize }) => (!$fontSize ? '18px' : $fontSize)};
   margin-bottom: 10px;
+  line-height: 1.4;
+  font-weight: 400;
 `;
 
-export const LogoutIcon = styled(GiExitDoor)`
-  font-size: 22px;
-  width: 30px;
-`;
-
-export const LogOutButton = styled.button`
-  width: 100px;
-  margin: 0 auto;
-  padding: 15px 0;
-  background-color: black;
-  color: #fff;
+export const Button = styled.button`
+  grid-area: btn;
+  margin: auto;
+  padding: 10px 25px;
+  border-radius: 40px;
+  background: #fff;
   border: none;
-  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
   font-size: 16px;
-  transition: background-color 250ms ease-in-out;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-weight: 600;
+
+  transition: background 250ms ease-in-out;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.accentHover};
+    background: ${({ theme }) => theme.colors.accent};
   }
 `;

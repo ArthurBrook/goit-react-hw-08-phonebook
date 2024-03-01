@@ -10,12 +10,13 @@ export const StyledNavLink = styled(NavLink)`
   transition: color 250ms ease-in-out;
 
   &.active {
-    color: ${({ theme }) => theme.colors.accentHover};
+    color: ${({ theme }) => theme.colors.accent};
   }
   &:hover {
-    color: ${({ theme }) => theme.colors.accentHover};
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
+
 
 export const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.colors.white};
@@ -25,7 +26,7 @@ export const StyledLink = styled(Link)`
   font-weight: 600;
   transition: color 250ms ease-in-out;
   &:hover {
-    color: ${({ theme }) => theme.colors.accentHover};
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
 export const UserName = styled.p`
@@ -35,18 +36,5 @@ export const UserName = styled.p`
 
   font-weight: 600;
   transition: color 250ms ease-in-out;
-`;
-
-export const LogoutButton = styled.button`
-  color: #000;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 40px;
-  background-color: white;
-  font-size: 16px;
-  transition: background-color 250ms ease-in-out;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.accentHover};
-  }
+  
 `;
