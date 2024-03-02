@@ -8,7 +8,7 @@ export const FilterLabel = styled.label`
 export const FilterInput = styled.input`
   padding: 10px;
   margin-bottom: 20px;
-  border: 2px solid #ff5959;
+  border: 2px solid #ff5500;
   border-radius: 5px;
   font-size: 16px;
   color: #333333;
@@ -17,6 +17,6 @@ export const FilterInput = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #e04949;
+    border-color: #ff0000;
   }
 `;

@@ -18,7 +18,7 @@ export const Label = styled.label`
 export const StyledField = styled(Field)`
   padding: 12px;
   max-width: 100%;
-  border: 2px solid #ff5959;
+  border: 2px solid #ff5500;
   border-radius: 5px;
   font-size: 16px;
   color: #333333;
@@ -27,14 +27,14 @@ export const StyledField = styled(Field)`
 
   &:focus {
     outline: none;
-    border-color: #e04949;
+    border-color: #ff0000;
   }
 `;
 
 export const Button = styled.button`
   padding: 12px;
   width: 100%;
-  background-color: #ff5959;
+  background-color: #ff5500;
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -43,7 +43,7 @@ export const Button = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #e04949;
+    background-color: #ff0000;
   }
 `;
 
