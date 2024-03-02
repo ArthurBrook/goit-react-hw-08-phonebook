@@ -13,7 +13,7 @@ export const HeroWrap = styled.div`
   border: 2px solid #fff;
 `;
 export const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.white};
+  color: #ff5500;
   margin-bottom: 20px;
   font-size: 44px;
 
@@ -35,11 +35,4 @@ export const Text = styled.p`
   line-height: 1.4;
   font-weight: 400;
 `;
-export const ListWrap = styled.div``;
 
-export const Item = styled.li`
-  & ::before {
-    content: '⭐ ';
-    margin-left: 16px;
-  }
-`;
