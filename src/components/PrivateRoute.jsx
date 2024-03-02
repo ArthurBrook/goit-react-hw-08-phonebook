@@ -1,15 +1,9 @@
-import { useAuth } from 'hooks';
-import PropTypes from 'prop-types';
-
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import { selectToken } from 'redux/auth/authSelectors';
 
 export const PrivateRoute = ({ component: Component, redirectTo }) => {
-  const { token } = useAuth();
+  const token = useSelector(selectToken);
 
   return token ? <Component /> : <Navigate to={redirectTo} replace />;
-};
-
-PrivateRoute.propTypes = {
-  component: PropTypes.object.isRequired,
-  redirectTo: PropTypes.string.isRequired,
 };

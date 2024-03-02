@@ -1,10 +1,9 @@
-
-
-import { useAuth } from 'hooks';
+import { useSelector } from 'react-redux';
 import { StyledLink, StyledNavLink } from './Nav.style';
+import { selectIsLoggedIn } from 'redux/auth/authSelectors';
 
 export const MainNav = () => {
-  const { isLoggedIn } = useAuth();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   return (
     <>

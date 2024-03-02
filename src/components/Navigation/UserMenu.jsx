@@ -1,21 +1,19 @@
-import { useDispatch } from 'react-redux';
-import { authOperations } from 'redux/auth';
-
-import { useAuth } from 'hooks';
-import { Button } from 'components';
-import { StyledNavLink, UserName } from './Nav.style';
+import { useDispatch, useSelector } from 'react-redux';
+import { LogoutButton, StyledNavLink, UserName } from './Nav.style';
+import { selectUsername } from 'redux/auth/authSelectors';
+import { logOut } from 'redux/auth/authOperations';
 
 export const UserMenu = () => {
   const dispatch = useDispatch();
-  const { user } = useAuth();
+  const name = useSelector(selectUsername);
 
   return (
     <>
       <StyledNavLink to="/profile">User Profile</StyledNavLink>
-      <UserName>{user.name}</UserName>
-      <Button type="button" onClick={() => dispatch(authOperations.logout())}>
+      <UserName>Welcome, {name}</UserName>
+      <LogoutButton type="button" onClick={() => dispatch(logOut())}>
         Logout
-      </Button>
+      </LogoutButton>
     </>
   );
 };

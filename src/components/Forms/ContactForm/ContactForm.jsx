@@ -1,78 +1,93 @@
-import { ErrorMessage, Formik } from 'formik';
-import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-
 import {
+  StyledForm,
+  Label,
+  StyledField,
   Button,
-  FormStyled,
-  InvalidInput,
-  PersonIcon,
-  TelephoneIcon,
-  Title,
-} from 'components';
+  ErrorMsg,
+} from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from 'redux/contacts/selectors';
+import { addContact } from 'redux/contacts/contactsOperations';
+import { toast } from 'react-toastify';
+import { Section } from 'components';
 
-import { Input } from '../Input';
-import { contactsOperations } from 'redux/contacts';
-import { isAlreadyOnList, scheme } from '../FormValidation';
-
-const schemeLogin = Yup.object().shape({
-  name: scheme.name,
-  number: scheme.number,
+const PhonebookSchema = Yup.object().shape({
+  name: Yup.string()
+    .matches(
+      /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
+      'Name may contain only letters, apostrophe, dash and spaces.'
+    )
+    .required('Required')
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!'),
+  number: Yup.string()
+    .matches(
+      /\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}/,
+      'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
+    )
+    .required('Required')
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!'),
 });
 
 export const ContactForm = () => {
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
-  const contactList = useSelector(selectContacts);
-  const inputNameRef = useRef();
-
-  const onSubmit = (formData, action) => {
-    if (isAlreadyOnList(contactList, formData)) {
-      return;
-    }
-    dispatch(contactsOperations.addContact(formData));
-    action.resetForm();
-    inputNameRef.current.focus();
-  };
 
   return (
-    <>
+    <Section title="Phonebook">
       <Formik
-        initialValues={{
-          name: '',
-          number: '',
+        initialValues={{ name: '', number: '' }}
+        validationSchema={PhonebookSchema}
+        onSubmit={({ name, number }, actions) => {
+          if (
+            contacts.find(
+              ({ name: oldName }) =>
+                oldName.toLowerCase() === name.toLowerCase()
+            )
+          ) {
+            toast.error(`${name} is already in contacts.`);
+            actions.resetForm();
+            return;
+          }
+          if (
+            contacts.find(
+              ({ number: oldNumber }) =>
+                oldNumber.toLowerCase() === number.toLowerCase()
+            )
+          ) {
+            toast.error(`Number ${number} is already in contacts.`);
+            actions.resetForm();
+            return;
+          }
+          toast.success(`${name} added to your contact list.`);
+          dispatch(addContact({ name, number }));
+          actions.resetForm();
         }}
-        onSubmit={onSubmit}
-        validationSchema={schemeLogin}
       >
-        {() => (
-          <FormStyled>
-            <Title>Add contact</Title>
-            <Input
-              innerRef={el => {
-                inputNameRef.current = el;
-              }}
-              icon={<PersonIcon />}
-              type="text"
+        <StyledForm>
+          <Label>
+            <StyledField
               name="name"
-              label="Contact name"
-            >
-              <ErrorMessage name="name" component={InvalidInput} />
-            </Input>
-            <Input
-              icon={<TelephoneIcon />}
-              type="tel"
+              type="text"
+              placeholder="Enter contact name"
+            />
+            <ErrorMsg name="name" component="div" />
+          </Label>
+          <Label>
+            <StyledField
               name="number"
-              label="Phone number"
-            >
-              <ErrorMessage name="number" component={InvalidInput} />
-            </Input>
-
-            <Button type="submit">Add contact</Button>
-          </FormStyled>
-        )}
+              type="tel"
+              placeholder="Enter contact number"
+            />
+            <ErrorMsg name="number" component="div" />
+          </Label>
+          <Button type="submit">Submit</Button>
+        </StyledForm>
       </Formik>
-    </>
+    </Section>
   );
 };

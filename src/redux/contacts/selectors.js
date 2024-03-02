@@ -1,5 +1,15 @@
-export const selectContacts = state => state.contacts.items;
-export const selectLoading = state => state.contacts.isLoading;
-export const selectError = state => state.contacts.error;
-export const selectShowModal = state => state.contacts.showModal;
-export const selectEditedContact = state => state.contacts.editedContact;
+import { createSelector } from '@reduxjs/toolkit';
+
+export const selectContacts = state => state.contacts.contacts;
+export const selectFilter = state => state.filter;
+export const selectIsLoading = state => state.contacts.isLoading;
+export const selectIsDeleting = state => state.contacts.isDeleting;
+
+export const selectDisplayedContacts = createSelector(
+  [selectContacts, selectFilter],
+  (contacts, filter) => {
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }
+);
